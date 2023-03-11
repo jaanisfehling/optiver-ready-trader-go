@@ -17,11 +17,19 @@ class OrderBook:
         self.bid_prices = bid_prices
         self.bid_volumes = bid_volumes
 
+    def asset_price(self) -> int:
+        return min(self.ask_prices)
+
 class BaseState:
+    ratio = A/B
+    expected_ration = E
+
     def update(self, order_book: OrderBook):
+        return BaseState
 
 
-    def evaluate(self):
+    def evaluate(self, order_book: OrderBook):
+
 
 
 
@@ -30,10 +38,10 @@ class IdleState(BaseState):
 
 
 class LongAShortB(BaseState):
+    pass
 
 
 
 class ShortALongB(BaseState):
-
-
+    pass
 

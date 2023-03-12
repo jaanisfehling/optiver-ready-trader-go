@@ -8,7 +8,6 @@ from itertools import count
 from typing import List, Dict
 
 import numpy as np
-import pandas as pd
 
 from ready_trader_go import Lifespan, Side
 
@@ -34,6 +33,7 @@ class OrderBook:
         return min(self.ask_prices)
 
 
+@dataclass
 class Order:
     client_order_id: int
     side: Side
@@ -45,16 +45,49 @@ class Order:
 class BaseState:
     bids: set
     asks: set
-    order_ids: count[int]
+    order_id_iterator: count[int]
+    last_order_id_0: int
+    last_order_id_1: int
 
     def update_orders(self, k: float, updated_instrument: int, order_book_0: OrderBook, order_book_1: OrderBook) -> \
-    List[Order]:
-        result_orders: List[Order] = list()
+            Dict[str, List[Order or int]]:
+        result_orders: Dict[str, List[Order or int]] = dict(send=list())
 
-        # Falls updated_instrument gestiegen ist, ist R positiv
-        if R >= 0:
-            best_current_ask = min(order_book_0.ask_prices)
-            #
+        # Asset 0 goes up
+        if True:
+            # Cancel both orders
+            result_orders["cancel"] = [self.last_order_id_0, self.last_order_id_1]
+
+            # Create new Orders
+            # Sell Asset 0
+            self.last_order_id_0 = next(self.order_id_iterator)
+            best_current_bid_0 = min(order_book_0.bid_prices)
+            result_orders["send"].append(
+                Order(self.last_order_id_0, Side.BUY, best_current_bid_0, 10, Lifespan.IMMEDIATE_OR_CANCEL))
+
+            # Buy Asset 1 at best current ask price
+            self.last_order_id_1 = next(self.order_id_iterator)
+            best_current_ask_1 = min(order_book_0.ask_prices)
+            result_orders["send"].append(
+                Order(self.last_order_id_1, Side.BUY, best_current_ask_1, 10, Lifespan.IMMEDIATE_OR_CANCEL))
+
+        # Asset 1 goes up
+        elif True:
+            # Cancel both orders
+            result_orders["cancel"] = [self.last_order_id_0, self.last_order_id_1]
+
+            # Create new Orders
+            # Sell Asset 1
+            self.last_order_id_1 = next(self.order_id_iterator)
+            best_current_bid_1 = min(order_book_1.bid_prices)
+            result_orders["send"].append(
+                Order(self.last_order_id_1, Side.BUY, best_current_bid_1, 10, Lifespan.IMMEDIATE_OR_CANCEL))
+
+            # Buy Asset 0 at best current ask price
+            self.last_order_id_0 = next(self.order_id_iterator)
+            best_current_ask_0 = min(order_book_0.ask_prices)
+            result_orders["send"].append(
+                Order(self.last_order_id_0, Side.BUY, best_current_ask_0, 10, Lifespan.IMMEDIATE_OR_CANCEL))
 
         return result_orders
 
@@ -77,7 +110,7 @@ class Context:
         self.order_books_0 = []
         self.order_books_1 = []
 
-    def update_order_book(self, order_book: OrderBook) -> List[Order]:
+    def update_order_book(self, order_book: OrderBook) -> Dict[str, List[Order or int]]:
         if order_book.instrument == 0:
             self.order_books_0.append(order_book)
         elif order_book.instrument == 1:
@@ -97,8 +130,8 @@ class Context:
         E_01: float = float(np.mean(array_01))
 
         # aktuelle Assetpreise
-        A_0: float = self.order_books_0[-1].get_asset_price()
-        A_1: float = self.order_books_1[-1].get_asset_price()
+        Price_0: float = self.order_books_0[-1].get_asset_price()
+        Price_1: float = self.order_books_1[-1].get_asset_price()
 
         # Korrelationskoeffizient
         Cov: float = E_01 - (E_0 * E_1)

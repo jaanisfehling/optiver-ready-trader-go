@@ -13,6 +13,7 @@ class AutoTrader(BaseAutoTrader):
         self.bids = set()
         self.asks = set()
         self.ask_id = self.ask_price = self.bid_id = self.bid_price = self.position = 0
+
         self.context = Context(IdleState())
 
     def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],

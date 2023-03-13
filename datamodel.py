@@ -3,11 +3,14 @@
 # Maximum number of autotraders per match: 8
 # Autotraders may not create sub-processes but may have multiple threads
 # Autotraders may not access the internet
+import itertools
+import math
 from dataclasses import dataclass
 from itertools import count
 from typing import List, Dict
 
 import numpy as np
+from numpy import ndarray
 
 from ready_trader_go import Lifespan, Side
 
@@ -42,19 +45,35 @@ class Order:
     lifespan: Lifespan
 
 
-class BaseState:
-    bids: set
-    asks: set
+class TradingState:
+    # Letzte Order Books der beiden Instrumente
+    last_order_book_0: OrderBook
+    last_order_book_1: OrderBook
+    # Liste aller Asset Preise
+    asset_prices_0: List[float]
+    asset_prices_1: List[float]
+    # Iterator um unique Order ID zu erzeugen
     order_id_iterator: count[int]
+    # Zuletzt benutzte Order ID jedes Instruments
     last_order_id_0: int
     last_order_id_1: int
+    # Z-Scores der letzten n Order Book Updates
+    z_scores: list[float]
 
-    def update_orders(self, k: float, updated_instrument: int, order_book_0: OrderBook, order_book_1: OrderBook) -> \
+    def __init__(self):
+        self.asset_prices_0 = []
+        self.asset_prices_1 = []
+        self.order_id_iterator = itertools.count(start=1, step=1)
+        self.last_order_id_1 = 0
+        self.last_order_id_1 = 0
+        self.z_scores = []
+
+    def update_orders(self, ratio: float, updated_instrument: int, order_book_0: OrderBook, order_book_1: OrderBook) -> \
             Dict[str, List[Order or int]]:
         result_orders: Dict[str, List[Order or int]] = dict(send=list())
 
         # Asset 0 goes up
-        if True:
+        if ratio:
             # Cancel both orders
             result_orders["cancel"] = [self.last_order_id_0, self.last_order_id_1]
 
@@ -89,52 +108,57 @@ class BaseState:
             result_orders["send"].append(
                 Order(self.last_order_id_0, Side.BUY, best_current_ask_0, 10, Lifespan.IMMEDIATE_OR_CANCEL))
 
-        return result_orders
-
-
-class LongAShortB(BaseState):
-    pass
-
-
-class ShortALongB(BaseState):
-    pass
-
-
-class Context:
-    state: BaseState
-    order_books_0: List[OrderBook]
-    order_books_1: List[OrderBook]
-
-    def __init__(self, initial_state: BaseState):
-        self.state = initial_state
-        self.order_books_0 = []
-        self.order_books_1 = []
-
     def update_order_book(self, order_book: OrderBook) -> Dict[str, List[Order or int]]:
+
         if order_book.instrument == 0:
-            self.order_books_0.append(order_book)
+            # Order Book speichern
+            self.last_order_book_0 = order_book
+            # Asset Preis der Liste hinzufügen
+            self.asset_prices_0.append(order_book.get_asset_price())
+            # Falls das andere Instrument noch keine Updates erhalten hat, werden wir nichts tun
+            if not self.asset_prices_1:
+                return {}
+            # Letzten Asset Preis des anderen Instruments kopieren und der anderen Liste hinzufügen,
+            # um keine Abweichungen in der Array-Division zu erhalten
+            self.asset_prices_1.append(self.asset_prices_1[-1])
+        # Das gleiche im Falle des anderen Instruments
         elif order_book.instrument == 1:
-            self.order_books_1.append(order_book)
-
-        # Erwartungswerte
-        n = 50
-        asset_prices_0 = [o.get_asset_price() for o in self.order_books_0[-n:]]
-        array_0 = np.array(asset_prices_0)
-        E_0: float = float(np.mean(array_0))
-
-        asset_prices_1 = [o.get_asset_price() for o in self.order_books_1[-n:]]
-        array_1 = np.array(asset_prices_1)
-        E_1: float = float(np.mean(array_1))
-
-        array_01 = np.multiply(array_0, array_1)
-        E_01: float = float(np.mean(array_01))
+            self.last_order_book_1 = order_book
+            self.asset_prices_1.append(order_book.get_asset_price())
+            # Falls das andere Instrument noch keine Updates erhalten hat, werden wir nichts tun
+            if not self.asset_prices_1:
+                return {}
+            self.asset_prices_0.append(self.asset_prices_0[-1])
 
         # aktuelle Assetpreise
-        Price_0: float = self.order_books_0[-1].get_asset_price()
-        Price_1: float = self.order_books_1[-1].get_asset_price()
+        price_0: float = self.asset_prices_0[-1]
+        price_1: float = self.asset_prices_1[-1]
 
-        # Korrelationskoeffizient
-        Cov: float = E_01 - (E_0 * E_1)
-        k: float = Cov / 1  # TODO: Formel..
+        # Letzte n Assetpreise
+        n = 50
+        asset_price_array_0 = np.array(self.asset_prices_0)
+        asset_price_array_1 = np.array(self.asset_prices_1)
 
-        return self.state.update_orders(k, order_book.instrument, self.order_books_0[-1], self.order_books_1[-1])
+        # Logarithmus der Assetpreise
+        log_prices_0: ndarray = np.log(asset_price_array_0)
+        log_prices_1: ndarray = np.log(asset_price_array_1)
+
+        # Berechne für jeden Log-Asset-Preis den Quotienten
+        weight_array = log_prices_0 / log_prices_1
+
+        # Nehme den Mittelwert der Quotienten
+        weight_avg = np.average(weight_array)
+
+        # Standartabweichung
+        weight_std = np.std(weight_array)
+
+        # Log Spread Funktion
+        spread = math.log(price_0) - weight_avg * math.log(price_1)
+
+        # Z-Score
+        z_score = spread / weight_std
+
+        # Z-Score Array updaten
+        self.z_scores.append(z_score)
+
+        return self.update_orders(z_score, self.order_books_0[-1], self.order_books_1[-1])

@@ -36,7 +36,6 @@
     "PositionLimit": 100
   },
   "Traders": {
-    "TraderOne": "secret",
-    "TraderTwo": "secret"
+    "Pfusch": "secret"
   }
 }

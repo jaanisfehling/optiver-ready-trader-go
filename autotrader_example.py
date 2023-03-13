@@ -17,11 +17,9 @@
 #     <https://www.gnu.org/licenses/>.
 import asyncio
 import itertools
-
 from typing import List
 
 from ready_trader_go import BaseAutoTrader, Instrument, Lifespan, MAXIMUM_ASK, MINIMUM_BID, Side
-
 
 LOT_SIZE = 10
 POSITION_LIMIT = 100
@@ -44,7 +42,6 @@ class AutoTrader(BaseAutoTrader):
         """Initialise a new instance of the AutoTrader class."""
         super().__init__(loop, team_name, secret)
         self.order_ids = itertools.count(1)
-        print("AutoTrader Class constructed")
         self.bids = set()
         self.asks = set()
         self.ask_id = self.ask_price = self.bid_id = self.bid_price = self.position = 0

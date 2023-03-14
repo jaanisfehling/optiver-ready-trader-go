@@ -39,64 +39,47 @@ class OrderBook:
         return self.ask_prices[0] if self.ask_prices[0] != 0 else None
 
 
-@dataclass
-class Order:
-    id: int
-    side: Side
-    price: int
-    volume: int
-    lifespan: Lifespan
+class AutoTrader(BaseAutoTrader):
 
-
-class Trader:
-    # Letzte Order Books der beiden Instrumente
-    last_order_book_0: OrderBook
-    last_order_book_1: OrderBook
-    # Liste aller Asset Preise
-    asset_prices_0: List[float]
-    asset_prices_1: List[float]
-    # Zuletzt benutzte Order ID jedes Instruments
-    order_id_0: int
-    order_id_1: int
-
-    # Z-Scores der letzten t Order Book Updates
-    # z_scores: list[float]
-
-    def __init__(self):
-        self.asset_prices_0 = []
-        self.asset_prices_1 = []
+    def __init__(self, loop: asyncio.AbstractEventLoop, team_name: str, secret: str):
+        super().__init__(loop, team_name, secret)
+        # Letzte Order Books der beiden Instrumente
+        self.last_order_book_0: OrderBook = OrderBook(-1, -1, [], [], [], [])
+        self.last_order_book_1: OrderBook = OrderBook(-2, -2, [], [], [], [])
+        # Liste aller Asset Preise
+        self.asset_prices_0: List[float] = []
+        self.asset_prices_1: List[float] = []
         # Iterator um eine unique Order ID zu erzeugen
         self.order_id_iterator = itertools.count(start=1, step=1)
-        self.order_id_0 = 0
-        self.order_id_1 = 0
-        # self.z_scores = []
+        # Zuletzt benutzte Order ID jedes Instruments
+        self.order_id_0: int = 0
+        self.order_id_1: int = 0
+        # True, Falls ein Hedge Order aktiv ist
+        self.is_hedge_active = False
+        # Z-Scores der letzten t Order Book Updates
+        # z_scores: list[float] = []
 
-    def update_orders(self, order_book: OrderBook) -> Dict[str, List[int or Order]]:
+    def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
+                                     ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
+        order_book = OrderBook(instrument, sequence_number, ask_prices, ask_volumes, bid_prices, bid_volumes)
 
+        # Order Book speichern und Assetpreis der Liste hinzufügen
         if order_book.instrument == 0:
-            # Order Book speichern
             self.last_order_book_0 = order_book
-            # Asset Preis der Liste hinzufügen
-            if order_book.get_asset_price() is not None:
-                self.asset_prices_0.append(order_book.get_asset_price())
-            else:
-                return {"cancel": [], "send": []}
-            # Falls das andere Instrument noch keine Updates erhalten hat, werden wir nichts tun
-            if not self.asset_prices_1:
-                return {"cancel": [], "send": []}
-            # Letzten Asset Preis des anderen Instruments kopieren und der anderen Liste hinzufügen,
-            # um keine Abweichungen in der Array-Division zu erhalten
-            self.asset_prices_1.append(self.asset_prices_1[-1])
-        # Das Gleiche im Falle des anderen Instruments
+            self.asset_prices_0.append(order_book.get_asset_price())
         elif order_book.instrument == 1:
             self.last_order_book_1 = order_book
-            if order_book.get_asset_price() is not None:
-                self.asset_prices_1.append(order_book.get_asset_price())
-            else:
-                return {"cancel": [], "send": []}
-            if not self.asset_prices_0:
-                return {"cancel": [], "send": []}
-            self.asset_prices_0.append(self.asset_prices_0[-1])
+            self.asset_prices_1.append(order_book.get_asset_price())
+
+        # Wir warten bis beide Order Books updated wurden
+        if self.last_order_book_0.sequence_number != self.last_order_book_1.sequence_number:
+            return
+
+        # Wir brechen außerdem ab, wenn eins der Orderbooks keine Preise enthält (z.B. am Anfang der Runde)
+        if self.asset_prices_0[-1] is None or self.asset_prices_1[-1] is None:
+            # Beide Einträge der Listen löschen, um inkonsistente Zustände zu vermeiden
+            del self.asset_prices_0[-1], self.asset_prices_1[-1]
+            return
 
         # aktuelle Assetpreise
         price_0: float = self.asset_prices_0[-1]
@@ -104,10 +87,6 @@ class Trader:
 
         # Letzte t Assetpreise
         t = 50
-        # Falls einer der Listen weniger als t Assetpreise beinhaltet
-        if len(self.asset_prices_0) < t or len(self.asset_prices_1) < t:
-            # Wählen wir t nach der Länge der kleineren Liste
-            t = min(len(self.asset_prices_0), len(self.asset_prices_1))
         asset_price_array_0 = np.array(self.asset_prices_0[-t:])
         asset_price_array_1 = np.array(self.asset_prices_1[-t:])
 
@@ -126,10 +105,11 @@ class Trader:
         # Falls die Standardabweichung 0 ergibt (typischerweise, wenn die Werte anfangs alle gleich sind)
         # brechen wir ab
         if ratio_std == 0:
-            return {"cancel": [], "send": []}
+            return None
 
         # Log Spread Funktion
-        spread = math.log(price_0) - ratio_avg * math.log(price_1)
+        # spread = math.log(price_0) - ratio_avg * math.log(price_1)
+        spread = price_0 - price_1
 
         # Z-Score
         z_score = spread / ratio_std
@@ -137,18 +117,22 @@ class Trader:
         # Z-Score Array updaten
         # self.z_scores.append(z_score)
 
-        # Finales Order Dictionary
-        result_orders: Dict[str, List[int or Order]] = {"cancel": [], "send": []}
+        self.logger.info({"Prices 0": self.asset_prices_0[-3:], "Prices 1": self.asset_prices_1[-3:],
+                          "Standardabweichung": ratio_std,
+                          "Z-Score": z_score,
+                          "Spread": spread,
+                          "Durschnittsquotient geglättet": ratio_avg})
 
         # Zu kaufende Instrumentenmenge mit Hedge Ratio berechnen
-        amount_1 = round(ACTIVE_VOLUME_LIMIT / (ratio_avg + 1))
-        amount_0 = round(amount_1 * ratio_avg)
+        amount_1 = 100
+        amount_0 = 100
 
         # Falls Z-Score den Upper Threshold (2-sigma) überschreitet
         # Sell 0, Buy 1
-        if z_score > 2 * ratio_std:
-            # Alte Orders Canceln
-            result_orders["cancel"] = [self.order_id_0, self.order_id_1]
+        # if z_score > 2 * ratio_std:
+        if spread > 0:
+            # Alte ETF Orders Canceln
+            self.send_cancel_order(self.order_id_1)
 
             # Asset 0 verkaufen
             # Nächste freie Order ID nehmen
@@ -156,22 +140,24 @@ class Trader:
             # Aktuell nehmen wir einfach den höchsten Bid Preis (ohne Rücksicht auf Volume)
             best_current_bid_0 = self.last_order_book_0.bid_prices[0]
             # Order erstellen
-            result_orders["send"].append(
-                Order(self.order_id_0, Side.SELL, best_current_bid_0, amount_0, Lifespan.LIMIT_ORDER))
+            if not self.is_hedge_active:
+                self.send_hedge_order(self.order_id_0, Side.SELL, best_current_bid_0, amount_0)
+                self.is_hedge_active = True
 
             # Asset 1 kaufen
             # Nächste freie Order ID nehmen
             self.order_id_1 = next(self.order_id_iterator)
             # Aktuell nehmen wir einfach den niedrigsten Ask Preis (ohne Rücksicht auf Volume)
             best_current_ask_1 = self.last_order_book_1.ask_prices[0]
-            result_orders["send"].append(
-                Order(self.order_id_1, Side.BUY, best_current_ask_1, amount_1, Lifespan.LIMIT_ORDER))
+            self.send_insert_order(self.order_id_1, Side.BUY, best_current_ask_1, amount_1,
+                                   Lifespan.IMMEDIATE_OR_CANCEL)
 
         # Falls Z-Score den Lower Threshold (2-sigma) unterschreitet
         # Buy 0, Sell 1
-        elif z_score < 2 * ratio_std:
-            # Alte Orders Canceln
-            result_orders["cancel"] = [self.order_id_0, self.order_id_1]
+        # elif z_score < 1.5 * ratio_std:
+        elif spread < 0:
+            # Alte ETF Orders Canceln
+            self.send_cancel_order(self.order_id_1)
 
             # Asset 0 kaufen
             # Nächste freie Order ID nehmen
@@ -179,39 +165,17 @@ class Trader:
             # Aktuell nehmen wir einfach den niedrigsten Ask Preis (ohne Rücksicht auf Volume)
             best_current_ask_0 = self.last_order_book_0.ask_prices[0]
             # Order erstellen
-            result_orders["send"].append(
-                Order(self.order_id_0, Side.BUY, best_current_ask_0, amount_0, Lifespan.LIMIT_ORDER))
+            if not self.is_hedge_active:
+                self.send_hedge_order(self.order_id_0, Side.BUY, best_current_ask_0, amount_0)
+                self.is_hedge_active = True
 
             # Asset 1 verkaufen
             # Nächste freie Order ID nehmen
             self.order_id_1 = next(self.order_id_iterator)
             # Aktuell nehmen wir einfach den höchsten Bid Preis (ohne Rücksicht auf Volume)
             best_current_bid_1 = self.last_order_book_1.bid_prices[0]
-            result_orders["send"].append(
-                Order(self.order_id_1, Side.SELL, best_current_bid_1, amount_1, Lifespan.LIMIT_ORDER))
-
-        return result_orders
-
-
-class AutoTrader(BaseAutoTrader):
-
-    def __init__(self, loop: asyncio.AbstractEventLoop, team_name: str, secret: str):
-        super().__init__(loop, team_name, secret)
-        self.bids = set()
-        self.asks = set()
-        self.ask_id = self.ask_price = self.bid_id = self.bid_price = self.position = 0
-        self.trader = Trader()
-
-    def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
-                                     ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
-        order_book = OrderBook(instrument, sequence_number, ask_prices, ask_volumes, bid_prices, bid_volumes)
-        self.logger.info(order_book)
-        new_orders = self.trader.update_orders(order_book)
-        self.logger.info(new_orders)
-        for order_id in new_orders["cancel"]:
-            self.send_cancel_order(order_id)
-        for order in new_orders["send"]:
-            self.send_insert_order(order.id, order.side, order.price, order.volume, order.lifespan)
+            self.send_insert_order(self.order_id_1, Side.SELL, best_current_bid_1, amount_1,
+                                   Lifespan.IMMEDIATE_OR_CANCEL)
 
     def on_error_message(self, client_order_id: int, error_message: bytes) -> None:
         self.logger.warning("error with order %d: %s", client_order_id, error_message.decode())
@@ -219,6 +183,7 @@ class AutoTrader(BaseAutoTrader):
     def on_hedge_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
         self.logger.info("received hedge filled for order %d with average price %d and volume %d", client_order_id,
                          price, volume)
+        self.is_hedge_active = False
 
     def on_order_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
         self.logger.info("received order filled for order %d with price %d and volume %d", client_order_id, price,

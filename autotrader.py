@@ -112,7 +112,8 @@ class AutoTrader(BaseAutoTrader):
         # Zu besitztende Instrumentenmenge mit Spread berechnen
         target_amount = 100 * spread_norm
 
-        # Sell 0, Buy 1
+        # Sell 0 (Future), Buy 1 (ETF)
+        # spread = price_0 - price_1
         if spread > 0:
             if target_amount < self.position_0:
                 # Asset 0 verkaufen

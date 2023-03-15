@@ -36,7 +36,6 @@ class OrderBook:
         # TODO: Define Asset Price
         return self.ask_prices[0] if self.ask_prices[0] != 0 else None
 
-
 class AutoTrader(BaseAutoTrader):
 
     def __init__(self, loop: asyncio.AbstractEventLoop, team_name: str, secret: str):
@@ -49,11 +48,20 @@ class AutoTrader(BaseAutoTrader):
         self.asset_prices_1: List[float] = []
         # Liste aller Spreads
         self.spreads: List[float] = []
+        # Position in Instruments
+        self.position_0: int = 0
+        self.position_1: int = 0
         # Iterator um eine unique Order ID zu erzeugen
-        self.order_id_iterator = itertools.count(start=1, step=1)
+        self.id_iter = itertools.count(start=0, step=1)
         # Zuletzt benutzte Order ID jedes Instruments
-        self.order_id_0: int = 0
-        self.order_id_1: int = 0
+        self.order_id_0: int = -1
+        self.order_id_1: int = -1
+
+    def best_order_price(self, order_book: OrderBook, side: Side, amount: int):
+        if side.BUY:
+            return order_book.ask_prices[0]
+        elif side.SELL:
+            return order_book.bid_prices[0]
 
     def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
                                      ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
@@ -86,9 +94,9 @@ class AutoTrader(BaseAutoTrader):
         asset_price_array_1 = np.array(self.asset_prices_1)
 
         # Spread zwischen Assets berechnen
-        spread = price_0 / price_1
+        spread = price_0 - price_1
 
-        # Spreads der Spread Liste hinzfügen
+        # Spreads der Spread-Liste hinzfügen
         self.spreads.append(spread)
 
         # Array mit allen Spreads erstellen
@@ -101,23 +109,14 @@ class AutoTrader(BaseAutoTrader):
             {"Prices 0": self.asset_prices_0[-3:], "Prices 1": self.asset_prices_1[-3:], "spread": spread,
              "spread_norm": spread_norm})
 
-        # Zu kaufende Instrumentenmenge mit Spread berechnen
-        amount = 100 * spread
+        # Zu besitztende Instrumentenmenge mit Spread berechnen
+        target_amount = 100 * spread_norm
 
-        # Falls Z-Score den Upper Threshold (2-sigma) überschreitet
         # Sell 0, Buy 1
-        # if z_score > 2 * ratio_std:
         if spread > 0:
-            # Alte ETF Orders Canceln
-            self.send_cancel_order(self.order_id_1)
-
-            # Asset 0 verkaufen
-            # Nächste freie Order ID nehmen
-            self.order_id_0 = next(self.order_id_iterator)
-            # Aktuell nehmen wir einfach den höchsten Bid Preis (ohne Rücksicht auf Volume)
-            best_current_bid_0 = self.last_order_book_0.bid_prices[0]
-            # Order erstellen
-            self.send_hedge_order(self.order_id_0, Side.SELL, best_current_bid_0, amount_0)
+            if target_amount < self.position_0:
+                # Asset 0 verkaufen
+                self.send_hedge_order(next(self.id_iter), Side.SELL, self.best_order_price, amount_0)
 
             # Asset 1 kaufen
             # Nächste freie Order ID nehmen

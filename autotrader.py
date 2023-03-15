@@ -51,6 +51,9 @@ class AutoTrader(BaseAutoTrader):
         # Position in Instruments
         self.position_0: int = 0
         self.position_1: int = 0
+        # Aktive ETF Orders
+        self.bids = set()
+        self.asks = set()
         # Iterator um eine unique Order ID zu erzeugen
         self.id_iter = itertools.count(start=0, step=1)
 
@@ -84,12 +87,12 @@ class AutoTrader(BaseAutoTrader):
             return
 
         # aktuelle Assetpreise
-        price_0: float = self.asset_prices_0[-1]
-        price_1: float = self.asset_prices_1[-1]
+        price_0: float = self.last_order_book_0.get_asset_price()
+        price_1: float = self.last_order_book_1.get_asset_price()
 
         # Array aller Assetpreise
-        asset_price_array_0 = np.array(self.asset_prices_0)
-        asset_price_array_1 = np.array(self.asset_prices_1)
+        # asset_price_array_0 = np.array(self.asset_prices_0)
+        # asset_price_array_1 = np.array(self.asset_prices_1)
 
         # Spread zwischen Assets berechnen
         spread = price_0 - price_1
@@ -97,19 +100,18 @@ class AutoTrader(BaseAutoTrader):
         # Spreads der Spread-Liste hinzfügen
         self.spreads.append(spread)
 
-        # Array mit allen Spreads erstellen
-        spread_array = np.array(self.spreads)
-
         # Spread zwischen 0 und 1 normalisieren
-        spread_norm = (spread_array - np.min(spread_array)) / (np.max(spread_array) - np.min(spread_array))
-        spread_norm = spread_norm[-1]
+        try:
+            spread_norm = (spread - min(self.spreads)) / (max(self.spreads) - min(self.spreads))
+        except ZeroDivisionError:
+            spread_norm = 0
 
         self.logger.info(
             {"Prices 0": self.asset_prices_0[-3:], "Prices 1": self.asset_prices_1[-3:], "spread": spread,
              "spread_norm": spread_norm})
 
         # Zu besitztende Instrumentenmenge mit Spread berechnen
-        target_amount = 100 * spread_norm
+        target_amount: int = round(100 * spread_norm)
 
         # Sell 0 (Future), Buy 1 (ETF)
         # spread = price_0 - price_1
@@ -177,21 +179,26 @@ class AutoTrader(BaseAutoTrader):
 
 
     def on_error_message(self, client_order_id: int, error_message: bytes) -> None:
-        self.logger.warning("error with order %d: %s", client_order_id, error_message.decode())
+        self.logger.warning(f"Error with order {client_order_id}: {error_message.decode()}")
 
     def on_hedge_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
-        self.logger.info("received hedge filled for order %d with average price %d and volume %d", client_order_id,
-                         price, volume)
-        self.is_hedge_active = False
+        self.logger.info(f"Hedge Order {client_order_id} filled; volume filled {volume}; at price {price}; Future position {self.position_0}")
+        if client_order_id in self.bids:
+            self.position_0 += volume
+        elif client_order_id in self.asks:
+            self.position_0 -= volume
 
     def on_order_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
-        self.logger.info("received order filled for order %d with price %d and volume %d", client_order_id, price,
-                         volume)
+        self.logger.info(f"Order {client_order_id} filled; volume filled {volume}; at price {price}; ETF position {self.position_1}")
+        if client_order_id in self.bids:
+            self.position_1 += volume
+        elif client_order_id in self.asks:
+            self.position_1 -= volume
+
 
     def on_order_status_message(self, client_order_id: int, fill_volume: int, remaining_volume: int,
                                 fees: int) -> None:
-        self.logger.info("received order status for order %d with fill volume %d remaining %d and fees %d",
-                         client_order_id, fill_volume, remaining_volume, fees)
+        self.logger.info(f"Order {client_order_id} status update; volume filled {fill_volume}; volume remaining {remaining_volume}; fees {fees}; Future position {self.position_0}; ETF position {self.position_1}")
 
     # def on_trade_ticks_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
     #                            ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:

@@ -53,11 +53,9 @@ class AutoTrader(BaseAutoTrader):
         self.position_1: int = 0
         # Iterator um eine unique Order ID zu erzeugen
         self.id_iter = itertools.count(start=0, step=1)
-        # Zuletzt benutzte Order ID jedes Instruments
-        self.order_id_0: int = -1
-        self.order_id_1: int = -1
 
     def best_order_price(self, order_book: OrderBook, side: Side, amount: int):
+        # TODO: Order Volume betrachten
         if side.BUY:
             return order_book.ask_prices[0]
         elif side.SELL:
@@ -104,6 +102,7 @@ class AutoTrader(BaseAutoTrader):
 
         # Spread zwischen 0 und 1 normalisieren
         spread_norm = (spread_array - np.min(spread_array)) / (np.max(spread_array) - np.min(spread_array))
+        spread_norm = spread_norm[-1]
 
         self.logger.info(
             {"Prices 0": self.asset_prices_0[-3:], "Prices 1": self.asset_prices_1[-3:], "spread": spread,
@@ -115,40 +114,67 @@ class AutoTrader(BaseAutoTrader):
         # Sell 0 (Future), Buy 1 (ETF)
         # spread = price_0 - price_1
         if spread > 0:
-            if target_amount < self.position_0:
-                # Asset 0 verkaufen
-                self.send_hedge_order(next(self.id_iter), Side.SELL, self.best_order_price, amount_0)
 
-            # Asset 1 kaufen
-            # Nächste freie Order ID nehmen
-            self.order_id_1 = next(self.order_id_iterator)
-            # Aktuell nehmen wir einfach den niedrigsten Ask Preis (ohne Rücksicht auf Volume)
-            best_current_ask_1 = self.last_order_book_1.ask_prices[0]
-            self.send_insert_order(self.order_id_1, Side.BUY, best_current_ask_1, amount_1,
-                                   Lifespan.IMMEDIATE_OR_CANCEL)
+            # Falls wir zu viel Future besitzen (target negativ weil short)
+            if -target_amount < self.position_0:
+                # Future verkaufen
+                volume = target_amount+self.position_0 # stimmt safe
+                price = self.best_order_price(self.last_order_book_0, Side.SELL, volume)
+                self.send_hedge_order(next(self.id_iter), Side.SELL, price, volume)
 
-        # Falls Z-Score den Lower Threshold (2-sigma) unterschreitet
-        # Buy 0, Sell 1
-        # elif z_score < 1.5 * ratio_std:
+            # Falls wir zu wenig Future besitzen
+            elif -target_amount > self.position_0:
+                # Future kaufen
+                volume = -target_amount-self.position_0 # stimmt safe
+                price = self.best_order_price(self.last_order_book_0, Side.BUY, volume)
+                self.send_hedge_order(next(self.id_iter), Side.BUY, price, volume)
+
+            # Falls wir zu viel ETF besitzen
+            if target_amount < self.position_1:
+                # ETF verkaufen
+                volume = -target_amount+self.position_0
+                price = self.best_order_price(self.last_order_book_1, Side.SELL, volume)
+                self.send_insert_order(next(self.id_iter), Side.SELL, price, volume, Lifespan.IMMEDIATE_OR_CANCEL)
+
+            # Falls zu wenig ETF
+            elif target_amount > self.position_1:
+                # ETF kaufen
+                volume = target_amount-self.position_0
+                price = self.best_order_price(self.last_order_book_1, Side.BUY, volume)
+                self.send_insert_order(next(self.id_iter), Side.BUY, price, volume, Lifespan.IMMEDIATE_OR_CANCEL)
+
+
+        # Buy 0 (Future), Sell 1 (ETF)
+        # spread = price_0 - price_1
         elif spread < 0:
-            # Alte ETF Orders Canceln
-            self.send_cancel_order(self.order_id_1)
 
-            # Asset 0 kaufen
-            # Nächste freie Order ID nehmen
-            self.order_id_0 = next(self.order_id_iterator)
-            # Aktuell nehmen wir einfach den niedrigsten Ask Preis (ohne Rücksicht auf Volume)
-            best_current_ask_0 = self.last_order_book_0.ask_prices[0]
-            # Order erstellen
-            self.send_hedge_order(self.order_id_0, Side.BUY, best_current_ask_0, amount_0)
+            # Falls wir zu viel Future besitzen (target positiv weil long)
+            if target_amount < self.position_0:
+                # Future verkaufen
+                volume = self.position_0-target_amount
+                price = self.best_order_price(self.last_order_book_0, Side.SELL, volume)
+                self.send_hedge_order(next(self.id_iter), Side.SELL, price, volume)
 
-            # Asset 1 verkaufen
-            # Nächste freie Order ID nehmen
-            self.order_id_1 = next(self.order_id_iterator)
-            # Aktuell nehmen wir einfach den höchsten Bid Preis (ohne Rücksicht auf Volume)
-            best_current_bid_1 = self.last_order_book_1.bid_prices[0]
-            self.send_insert_order(self.order_id_1, Side.SELL, best_current_bid_1, amount_1,
-                                   Lifespan.IMMEDIATE_OR_CANCEL)
+            elif target_amount > self.position_0:
+                # Future kaufen
+                volume = target_amount-self.position_0
+                price = self.best_order_price(self.last_order_book_0, Side.BUY, volume)
+                self.send_hedge_order(next(self.id_iter), Side.BUY, price, volume)
+
+            # Falls wir zu wenig Short im ETF sind
+            if -target_amount < self.position_1:
+                # ETF verkaufen
+                volume = target_amount+self.position_0
+                price = self.best_order_price(self.last_order_book_1, Side.SELL, volume)
+                self.send_insert_order(next(self.id_iter), Side.SELL, price, volume, Lifespan.IMMEDIATE_OR_CANCEL)
+
+            # Falls zu stark short Position ETF
+            elif -target_amount > self.position_1:
+                # ETF kaufen
+                volume = -self.position_0-target_amount
+                price = self.best_order_price(self.last_order_book_1, Side.BUY, volume)
+                self.send_insert_order(next(self.id_iter), Side.BUY, price, volume, Lifespan.IMMEDIATE_OR_CANCEL)
+
 
     def on_error_message(self, client_order_id: int, error_message: bytes) -> None:
         self.logger.warning("error with order %d: %s", client_order_id, error_message.decode())
@@ -167,7 +193,7 @@ class AutoTrader(BaseAutoTrader):
         self.logger.info("received order status for order %d with fill volume %d remaining %d and fees %d",
                          client_order_id, fill_volume, remaining_volume, fees)
 
-    def on_trade_ticks_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
-                               ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
-        self.logger.info("received trade ticks for instrument %d with sequence number %d", instrument,
-                         sequence_number)
+    # def on_trade_ticks_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
+    #                            ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
+    #     self.logger.info("received trade ticks for instrument %d with sequence number %d", instrument,
+    #                      sequence_number)

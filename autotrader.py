@@ -57,12 +57,41 @@ class AutoTrader(BaseAutoTrader):
         # Iterator um eine unique Order ID zu erzeugen
         self.id_iter = itertools.count(start=0, step=1)
 
-    def best_order_price(self, order_book: OrderBook, side: Side, amount: int):
-        # TODO: Order Volume betrachten
-        if side.BUY:
-            return order_book.ask_prices[0]
-        elif side.SELL:
-            return order_book.bid_prices[0]
+    def send_orders(self, instrument: int, order_book: OrderBook, side: Side, volume: int):
+        if side == Side.BUY:
+            prices = order_book.ask_prices
+            volumes = order_book.ask_volumes
+        elif side == Side.SELL:
+            prices = order_book.bid_prices
+            volumes = order_book.bid_volumes
+        for i in range(len(prices)):
+            if volume > 0:
+                if instrument == 1:
+                    id = next(self.id_iter)
+                    if volume <= volumes[i]:
+                        vol = volume
+                        volume = 0
+                    elif volume > volumes[i]:
+                        vol = volumes[i]
+                        volume -= vol
+                    self.send_insert_order(id, side, prices[i], vol, Lifespan.IMMEDIATE_OR_CANCEL)
+                    if side == Side.SELL:
+                        self.asks.add(id)
+                    elif side == Side.BUY:
+                        self.bids.add(id)
+                elif instrument == 0:
+                    id = next(self.id_iter)
+                    if volume <= volumes[i]:
+                        vol = volume
+                        volume = 0
+                    elif volume > volumes[i]:
+                        vol = volumes[i]
+                        volume -= vol
+                    self.send_hedge_order(id, side, prices[i], vol)
+                    if side == Side.SELL:
+                        self.asks.add(id)
+                    elif side == Side.BUY:
+                        self.bids.add(id)
 
     def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
                                      ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:

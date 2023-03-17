@@ -72,7 +72,7 @@ class AutoTrader(BaseAutoTrader):
         self.last_order_book_1: OrderBook = OrderBook(-2, -2, [], [], [], [])
         # Liste aller Spreads
         self.spreads: List[float] = []
-        # Position in Instruments
+        # Anzahl an Lots die wir besitzen
         self.position_0: int = 0
         self.position_1: int = 0
         # Aktive ETF Orders
@@ -93,26 +93,26 @@ class AutoTrader(BaseAutoTrader):
                 id = next(self.id_iter)
                 if instrument == 1:
                     if volume <= volumes[i]:
-                        vol = volume
+                        partial_vol = volume
                         volume = 0
                     elif volume > volumes[i]:
-                        vol = volumes[i]
-                        volume -= vol
-                    self.send_insert_order(id, side, prices[i], vol, Lifespan.IMMEDIATE_OR_CANCEL)
-                    self.logger.info(f"ETF {side}; price {prices[i]}; volume: {vol}")
+                        partial_vol = volumes[i]
+                        volume -= partial_vol
+                    self.send_insert_order(id, side, prices[i], partial_vol, Lifespan.IMMEDIATE_OR_CANCEL)
+                    self.logger.info(f"SEND ETF ORDER; side {side}; price {prices[i]}; volume: {partial_vol}")
                     if side == Side.SELL:
                         self.asks.add(id)
                     elif side == Side.BUY:
                         self.bids.add(id)
                 elif instrument == 0:
                     if volume <= volumes[i]:
-                        vol = volume
+                        partial_vol = volume
                         volume = 0
                     elif volume > volumes[i]:
-                        vol = volumes[i]
-                        volume -= vol
-                    self.send_hedge_order(id, side, prices[i], vol)
-                    self.logger.info(f"FUTURE {side}; price {prices[i]}; volume: {vol}")
+                        partial_vol = volumes[i]
+                        volume -= partial_vol
+                    self.send_hedge_order(id, side, prices[i], partial_vol)
+                    self.logger.info(f"SEND FUTURE ORDER; side {side}; price {prices[i]}; volume: {partial_vol}")
                     if side == Side.SELL:
                         self.asks.add(id)
                     elif side == Side.BUY:
@@ -156,8 +156,7 @@ class AutoTrader(BaseAutoTrader):
             # Falls ein normalisierter Spread nicht existiert (Anfang der Runde), handeln wir nicht
             spread_norm = 0
 
-        self.logger.info(
-            {"Price 0": price_0, "Price 1": price_1, "spread": spread, "spread_norm": spread_norm})
+        self.logger.info({"Price 0": price_0, "Price 1": price_1, "spread": spread, "spread_norm": spread_norm})
 
         # Zu besitztende Instrumentenmenge mit Spread berechnen
         target_amount: int = round(100 * spread_norm)
@@ -176,6 +175,15 @@ class AutoTrader(BaseAutoTrader):
                 # ETF kaufen
                 self.send_orders(1, self.last_order_book_1, Side.BUY, target_amount-self.position_1)
 
+            # Falls wir zu viel Future besitzen (target negativ weil short)
+            if -target_amount < self.position_0:
+                # Future verkaufen
+                self.send_orders(0, self.last_order_book_0, Side.SELL, target_amount+self.position_0)
+
+            # Falls wir zu wenig Future besitzen
+            elif -target_amount > self.position_0:
+                # Future kaufen
+                self.send_orders(0, self.last_order_book_0, Side.BUY, -target_amount-self.position_0)
 
         # Buy 0 (Future), Sell 1 (ETF)
         # spread = price_0 - price_1
@@ -191,46 +199,37 @@ class AutoTrader(BaseAutoTrader):
                 # ETF kaufen
                 self.send_orders(1, self.last_order_book_1, Side.BUY, -self.position_1-target_amount)
 
+            # Falls wir zu viel Future besitzen (target positiv weil long)
+            if target_amount < self.position_0:
+                # Future verkaufen
+                self.send_orders(0, self.last_order_book_0, Side.SELL, self.position_0-target_amount)
+
+            elif target_amount > self.position_0:
+                # Future kaufen
+                self.send_orders(0, self.last_order_book_0, Side.BUY, target_amount-self.position_0)
+
 
     def on_error_message(self, client_order_id: int, error_message: bytes) -> None:
         self.logger.warning(f"Error with order {client_order_id}: {error_message.decode()}")
 
     def on_hedge_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
-        self.logger.info(f"Future Order {client_order_id} filled; volume filled {volume}; at price {price}; Future position {self.position_0}")
         if client_order_id in self.bids:
             self.position_0 += volume
         elif client_order_id in self.asks:
             self.position_0 -= volume
+        self.logger.info(f"Future Order {client_order_id} filled; volume filled {volume}; at price {price}; Future position {self.position_0}")
 
     def on_order_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
-
-        # Falls wir ETF gekauft haben, müssen wir Future verkaufen
         if client_order_id in self.bids:
             self.position_1 += volume
-
-            # Wir hedgen unsere gesamte ETF Position
-            target_amount = -self.position_1
-
-            # Future verkaufen
-            self.send_orders(0, self.last_order_book_0, Side.SELL, self.position_0-target_amount)
-
-
-        # Falls wir ETF verkauft haben
         elif client_order_id in self.asks:
             self.position_1 -= volume
-
-            # Wir hedgen unsere gesamte ETF Position
-            target_amount = -self.position_1
-
-            # Future kaufen
-            self.send_orders(0, self.last_order_book_0, Side.BUY, target_amount-self.position_0)
-
         self.logger.info(f"ETF Order {client_order_id} filled; volume filled {volume}; at price {price}; ETF position {self.position_1}")
 
 
     def on_order_status_message(self, client_order_id: int, fill_volume: int, remaining_volume: int,
                                 fees: int) -> None:
-        self.logger.info(f"Order {client_order_id} status update; volume filled {fill_volume}; volume remaining {remaining_volume}; fees {fees}; Future position {self.position_0}; ETF position {self.position_1}")
+        # self.logger.info(f"Order {client_order_id} status update; volume filled {fill_volume}; volume remaining {remaining_volume}; fees {fees}; Future position {self.position_0}; ETF position {self.position_1}")
         if remaining_volume == 0:
             # Könnte entweder ein Bid oder Ask sein, die IDs sind sowieso unique
             self.bids.discard(client_order_id)

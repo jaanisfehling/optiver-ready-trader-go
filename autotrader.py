@@ -70,7 +70,7 @@ class AutoTrader(BaseAutoTrader):
         future_ask_vols = list(self.last_order_book_0.ask_volumes)
         future_bid_vols = list(self.last_order_book_0.bid_volumes)
 
-        inserted_volume: int = 0
+        sent_volume: int = 0
         for i in range(len(etf_asks)):
             for j in range(len(etf_asks)):
 
@@ -79,27 +79,27 @@ class AutoTrader(BaseAutoTrader):
                 if etf_asks[i] + 0 < future_bids[j] - 0 and etf_asks[i] != 0 and future_bids[j] != 0:
 
                     # Mögliches profitables Volume
-                    volume = min(etf_ask_vols[i], future_bid_vols[j])
+                    volume: int = min(etf_ask_vols[i], future_bid_vols[j])
 
                     # Falls wir bereits max. Volumen erreicht haben (100 Stück)
-                    tradable_vol = 100 - (self.position_1 + inserted_volume)
+                    tradable_vol: int = 100 - (self.position_1 + sent_volume)
 
                     # Order ID zu laufenden Bids hinzufügen
                     id = next(self.id_iter)
                     self.bids_1.add(id)
 
                     if volume >= tradable_vol:
-                        self.send_insert_order(id, Side.BUY, etf_asks[i], tradable_vol, Lifespan.LIMIT_ORDER)
+                        self.send_insert_order(id, Side.BUY, etf_asks[i], tradable_vol, Lifespan.IMMEDIATE_OR_CANCEL)
                         self.logger.info(f"SEND ETF ORDER; side {Side.BUY}; price {etf_asks[i]}; volume: {tradable_vol}")
                         return
 
                     # Sonst: Order nach profitablem Volumen ausführen
                     else:
-                        inserted_volume += volume
+                        sent_volume += volume
                         future_bid_vols[j] -= volume
                         etf_ask_vols[j] -= volume
-                        self.send_insert_order(id, Side.BUY, etf_asks[i], volume, Lifespan.LIMIT_ORDER)
-                        self.logger.info(f"SEND ETF ORDER; side {Side.BUY}; price {etf_asks[i]}; volume: {tradable_vol}")
+                        self.send_insert_order(id, Side.BUY, etf_asks[i], volume, Lifespan.IMMEDIATE_OR_CANCEL)
+                        self.logger.info(f"SEND ETF ORDER; side {Side.BUY}; price {etf_asks[i]}; volume: {volume}")
 
                 # Nun: Short ETF und Long Future
                 elif etf_bids[i] - 0 > future_asks[j] + 0 and etf_bids[i] != 0 and future_asks[j] != 0:
@@ -108,24 +108,24 @@ class AutoTrader(BaseAutoTrader):
                     volume = min(etf_bid_vols[i], future_ask_vols[j])
 
                     # Falls wir bereits max. Volumen erreicht haben (100 Stück)
-                    tradable_vol = 100 - (self.position_1 + inserted_volume)
+                    tradable_vol = 100 - (abs(self.position_1) + sent_volume)
 
                     # Order ID zu laufenden Asks hinzufügen
                     id = next(self.id_iter)
                     self.asks_1.add(id)
 
                     if volume >= tradable_vol:
-                        self.send_insert_order(id, Side.SELL, etf_bids[i], tradable_vol, Lifespan.LIMIT_ORDER)
+                        self.send_insert_order(id, Side.SELL, etf_bids[i], tradable_vol, Lifespan.IMMEDIATE_OR_CANCEL)
                         self.logger.info(f"SEND ETF ORDER; side {Side.SELL}; price {etf_bids[i]}; volume: {tradable_vol}")
                         return
 
                     # Sonst: Order nach profitablem Volumen ausführen
                     else:
-                        inserted_volume += volume
-                        future_bid_vols[j] -= volume
-                        etf_ask_vols[j] -= volume
-                        self.send_insert_order(id, Side.SELL, etf_bids[i], volume, Lifespan.LIMIT_ORDER)
-                        self.logger.info(f"SEND ETF ORDER; side {Side.SELL}; price {etf_bids[i]}; volume: {tradable_vol}")
+                        sent_volume += volume
+                        future_ask_vols[j] -= volume
+                        etf_bid_vols[j] -= volume
+                        self.send_insert_order(id, Side.SELL, etf_bids[i], volume, Lifespan.IMMEDIATE_OR_CANCEL)
+                        self.logger.info(f"SEND ETF ORDER; side {Side.SELL}; price {etf_bids[i]}; volume: {volume}")
 
 
 

@@ -2419,3 +2419,129 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2023-03-19 17:55:16,713 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=84.782000 client_order_id=37 message='future position limit breached'
 2023-03-19 17:55:16,713 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=84.782000
 2023-03-19 17:55:16,713 [INFO   ] [CONNECTION] fd=1004 connection lost
+2023-03-19 19:01:12,049 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 19:01:12,049 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data4.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 19:01:12,049 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 19:01:12,049 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 19:01:12,050 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 19:01:12,050 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 19:01:12,050 [INFO   ] [INFORMATION] information channel established
+2023-03-19 19:01:12,225 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:52375
+2023-03-19 19:01:12,225 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 19:01:13,685 [INFO   ] [CONNECTION] fd=1004 connection established: peer=127.0.0.1:52376
+2023-03-19 19:01:17,073 [INFO   ] [CONTROLLER] market open
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=62 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=62 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=62 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=62 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=63 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=63 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=63 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=64 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:03:26,119 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=129.046000 client_order_id=64 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=85 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=85 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=85 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=85 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=86 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=86 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:04:17,621 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=180.546000 client_order_id=86 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,821 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=111 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=111 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=111 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=111 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=112 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=112 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=112 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=113 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:05:51,822 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=274.750000 client_order_id=113 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=130 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=130 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=130 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=130 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=131 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=131 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:06:25,813 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=308.734000 client_order_id=131 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:07,792 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 19:39:07,793 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data4.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 19:39:07,793 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 19:39:07,793 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 19:39:07,793 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 19:39:07,793 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 19:39:07,794 [INFO   ] [INFORMATION] information channel established
+2023-03-19 19:39:09,107 [INFO   ] [CONNECTION] fd=1004 connection established: peer=127.0.0.1:58612
+2023-03-19 19:39:09,942 [INFO   ] [CONNECTION] fd=992 connection established: peer=127.0.0.1:58613
+2023-03-19 19:39:09,942 [INFO   ] [EXECUTION] fd=992 'Pfusch' is ready!
+2023-03-19 19:39:12,795 [INFO   ] [CONTROLLER] market open
+2023-03-19 19:39:33,850 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=12 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,850 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=12 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,850 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=12 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,850 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=12 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,851 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=13 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,851 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=13 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:33,851 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=21.063000 client_order_id=13 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=17 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=17 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=17 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=17 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=18 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=18 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:39:36,548 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=23.750000 client_order_id=18 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=46 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=46 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=46 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=46 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=47 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=47 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:40:13,356 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=60.563000 client_order_id=47 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=101 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=101 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=101 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=101 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=102 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=102 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:41:27,574 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=134.782000 client_order_id=102 message='duplicate or out-of-order client_order_id'
+2023-03-19 19:47:19,559 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 19:47:19,559 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data4.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 19:47:19,559 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 19:47:19,559 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 19:47:19,560 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 19:47:19,560 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 19:47:19,560 [INFO   ] [INFORMATION] information channel established
+2023-03-19 19:47:20,868 [INFO   ] [CONNECTION] fd=180 connection established: peer=127.0.0.1:58821
+2023-03-19 19:47:21,680 [INFO   ] [CONNECTION] fd=1004 connection established: peer=127.0.0.1:58824
+2023-03-19 19:47:21,681 [INFO   ] [EXECUTION] fd=1004 'Pfusch' is ready!
+2023-03-19 19:47:24,570 [INFO   ] [CONTROLLER] market open
+2023-03-19 19:48:09,632 [INFO   ] [EXECUTION] fd=1004 message frequency limit breached: now=45.062000 value=51 limit=50
+2023-03-19 19:48:09,633 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=45.062000 client_order_id=0 message='message frequency limit breached'
+2023-03-19 19:48:09,633 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=45.062000
+2023-03-19 19:48:09,633 [INFO   ] [CONNECTION] fd=1004 connection lost
+2023-03-19 19:53:14,237 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 19:53:14,237 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data4.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 19:53:14,237 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 19:53:14,237 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 19:53:14,238 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 19:53:14,238 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 19:53:14,238 [INFO   ] [INFORMATION] information channel established
+2023-03-19 19:53:15,561 [INFO   ] [CONNECTION] fd=932 connection established: peer=127.0.0.1:59000
+2023-03-19 19:53:16,577 [INFO   ] [CONNECTION] fd=408 connection established: peer=127.0.0.1:59001
+2023-03-19 19:53:16,577 [INFO   ] [EXECUTION] fd=408 'Pfusch' is ready!
+2023-03-19 19:53:19,263 [INFO   ] [CONTROLLER] market open
+2023-03-19 19:54:46,448 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 19:54:46,448 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data3.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 19:54:46,449 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 19:54:46,449 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 19:54:46,449 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 19:54:46,449 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 19:54:46,449 [INFO   ] [INFORMATION] information channel established
+2023-03-19 19:54:46,626 [INFO   ] [CONNECTION] fd=788 connection established: peer=127.0.0.1:59043
+2023-03-19 19:54:46,626 [INFO   ] [EXECUTION] fd=788 'Pfusch' is ready!
+2023-03-19 19:54:47,745 [INFO   ] [CONNECTION] fd=512 connection established: peer=127.0.0.1:59044
+2023-03-19 19:54:51,454 [INFO   ] [CONTROLLER] market open
+2023-03-19 20:09:49,055 [INFO   ] [MARKET_EVENTS] reader thread complete after processing 440197 market events
+2023-03-19 20:09:51,452 [INFO   ] [TIMER] shutting down the match: time=900.000000 reason='match complete'
+2023-03-19 20:09:51,452 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=900.000000
+2023-03-19 20:09:51,452 [INFO   ] [CONNECTION] fd=788 connection lost
+2023-03-19 20:09:51,452 [INFO   ] [MATCH_EVENTS] writer thread complete after processing 440729 match events
+2023-03-19 20:09:51,452 [INFO   ] [SCORE_BOARD] writer thread complete after processing 3601 score records
+2023-03-19 20:09:51,452 [INFO   ] [APP] closing event loop

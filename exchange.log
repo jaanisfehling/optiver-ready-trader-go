@@ -2097,3 +2097,221 @@ ConnectionResetError: [WinError 10054] An existing connection was forcibly close
 2023-03-18 23:55:23,263 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=132.500000
 2023-03-18 23:55:23,263 [INFO   ] [CONNECTION] fd=1016 connection lost
 2023-03-18 23:55:30,607 [INFO   ] [COMPETITOR] Unhedged lots timer expired for Pfusch at etf=24 fut=152 rel=176
+2023-03-19 09:12:24,335 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 09:12:24,335 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 09:12:24,336 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 09:12:24,336 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 09:12:24,336 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 09:12:24,340 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 09:12:24,340 [INFO   ] [INFORMATION] information channel established
+2023-03-19 09:12:24,588 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65140
+2023-03-19 09:12:24,588 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 09:12:26,192 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65143
+2023-03-19 09:12:29,364 [INFO   ] [CONTROLLER] market open
+2023-03-19 09:14:42,946 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 09:14:42,946 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 09:14:42,946 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 09:14:42,946 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 09:14:42,947 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 09:14:42,956 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 09:14:42,956 [INFO   ] [INFORMATION] information channel established
+2023-03-19 09:14:43,085 [INFO   ] [CONNECTION] fd=944 connection established: peer=127.0.0.1:65173
+2023-03-19 09:14:43,085 [INFO   ] [EXECUTION] fd=944 'Pfusch' is ready!
+2023-03-19 09:14:44,236 [INFO   ] [CONNECTION] fd=948 connection established: peer=127.0.0.1:65174
+2023-03-19 09:14:47,977 [INFO   ] [CONTROLLER] market open
+2023-03-19 09:18:33,744 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 09:18:33,744 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 09:18:33,745 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 09:18:33,745 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 09:18:33,745 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 09:18:33,749 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 09:18:33,749 [INFO   ] [INFORMATION] information channel established
+2023-03-19 09:18:33,901 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65181
+2023-03-19 09:18:33,901 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 09:18:35,109 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65182
+2023-03-19 09:18:38,750 [INFO   ] [CONTROLLER] market open
+2023-03-19 09:19:34,272 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=55.531000 client_order_id=17 message='order rejected: in cross with an existing order'
+2023-03-19 09:19:34,272 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=55.531000 client_order_id=18 message='order rejected: in cross with an existing order'
+2023-03-19 09:19:36,247 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=57.500000 client_order_id=19 message='ETF position limit breached'
+2023-03-19 09:19:36,247 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=57.500000
+2023-03-19 09:19:36,247 [INFO   ] [CONNECTION] fd=1016 connection lost
+2023-03-19 09:20:30,107 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 09:20:30,108 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 09:20:30,108 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 09:20:30,108 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 09:20:30,108 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 09:20:30,112 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 09:20:30,112 [INFO   ] [INFORMATION] information channel established
+2023-03-19 09:20:30,249 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65190
+2023-03-19 09:20:30,250 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 09:20:31,433 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65191
+2023-03-19 09:20:35,131 [INFO   ] [CONTROLLER] market open
+2023-03-19 09:21:30,648 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=55.515000 client_order_id=17 message='order rejected: in cross with an existing order'
+2023-03-19 09:21:30,649 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=55.515000 client_order_id=18 message='order rejected: in cross with an existing order'
+2023-03-19 09:21:32,635 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=57.500000 client_order_id=19 message='ETF position limit breached'
+2023-03-19 09:21:32,635 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=57.500000
+2023-03-19 09:21:32,635 [INFO   ] [CONNECTION] fd=1016 connection lost
+2023-03-19 09:22:32,643 [INFO   ] [COMPETITOR] Unhedged lots timer expired for Pfusch at etf=-114 fut=82 rel=-32
+2023-03-19 16:08:48,961 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:08:48,962 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:08:48,962 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:08:48,962 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:08:48,963 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:08:48,969 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:08:48,969 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:08:49,146 [INFO   ] [CONNECTION] fd=952 connection established: peer=127.0.0.1:65326
+2023-03-19 16:08:49,147 [INFO   ] [EXECUTION] fd=952 'Pfusch' is ready!
+2023-03-19 16:08:50,612 [INFO   ] [CONNECTION] fd=960 connection established: peer=127.0.0.1:65327
+2023-03-19 16:08:53,972 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:09:55,885 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:09:55,885 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:09:55,885 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:09:55,885 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:09:55,886 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:09:55,892 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:09:55,892 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:09:56,018 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65332
+2023-03-19 16:09:56,020 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 16:09:57,401 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65333
+2023-03-19 16:10:00,906 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:12:26,744 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:12:26,744 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:12:26,745 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:12:26,745 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:12:26,745 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:12:26,751 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:12:26,751 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:12:26,889 [INFO   ] [CONNECTION] fd=640 connection established: peer=127.0.0.1:65338
+2023-03-19 16:12:26,889 [INFO   ] [EXECUTION] fd=640 'Pfusch' is ready!
+2023-03-19 16:12:28,066 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65339
+2023-03-19 16:12:31,753 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:13:17,239 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=45.485000 client_order_id=9 message='duplicate or out-of-order client_order_id'
+2023-03-19 16:17:05,074 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:17:05,074 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:17:05,075 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:17:05,075 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:17:05,075 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:17:05,082 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:17:05,082 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:17:05,214 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65344
+2023-03-19 16:17:05,214 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 16:17:06,587 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65345
+2023-03-19 16:17:10,089 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:20:31,400 [INFO   ] [EXECUTION] fd=1016 message frequency limit breached: now=201.313000 value=51 limit=50
+2023-03-19 16:20:31,400 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=201.313000 client_order_id=0 message='message frequency limit breached'
+2023-03-19 16:20:31,400 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=201.313000
+2023-03-19 16:20:31,400 [INFO   ] [CONNECTION] fd=1016 connection lost
+2023-03-19 16:36:27,613 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:36:27,613 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:36:27,614 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:36:27,614 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:36:27,614 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:36:27,623 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:36:27,623 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:36:27,754 [INFO   ] [CONNECTION] fd=960 connection established: peer=127.0.0.1:65451
+2023-03-19 16:36:27,754 [INFO   ] [EXECUTION] fd=960 'Pfusch' is ready!
+2023-03-19 16:36:28,937 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65452
+2023-03-19 16:36:32,637 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:36:32,676 [INFO   ] [CONNECTION] fd=960 connection lost
+2023-03-19 16:36:32,683 [WARNING] [EXECUTION] fd=960 lost connection to auto-trader:
+2023-03-19 16:37:28,845 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:37:28,845 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:37:28,845 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:37:28,845 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:37:28,846 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:37:28,850 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:37:28,851 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:37:28,973 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65457
+2023-03-19 16:37:28,973 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 16:37:30,134 [INFO   ] [CONNECTION] fd=1020 connection established: peer=127.0.0.1:65458
+2023-03-19 16:37:33,870 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:37:40,169 [INFO   ] [CONNECTION] fd=1016 connection lost
+2023-03-19 16:37:40,169 [WARNING] [EXECUTION] fd=1016 lost connection to auto-trader:
+2023-03-19 16:39:24,660 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:39:24,660 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:39:24,660 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:39:24,662 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:39:24,662 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:39:24,669 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:39:24,669 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:39:24,811 [INFO   ] [CONNECTION] fd=868 connection established: peer=127.0.0.1:65466
+2023-03-19 16:39:24,812 [INFO   ] [EXECUTION] fd=868 'Pfusch' is ready!
+2023-03-19 16:39:25,980 [INFO   ] [CONNECTION] fd=872 connection established: peer=127.0.0.1:65467
+2023-03-19 16:39:29,672 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:39:35,899 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=6.219000 client_order_id=3 message='future position limit breached'
+2023-03-19 16:39:35,899 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=6.219000
+2023-03-19 16:39:35,899 [INFO   ] [CONNECTION] fd=868 connection lost
+2023-03-19 16:42:52,956 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:42:52,956 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:42:52,957 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:42:52,957 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:42:52,957 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:42:52,963 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:42:52,963 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:42:53,085 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:65474
+2023-03-19 16:42:53,085 [INFO   ] [EXECUTION] fd=1016 'Pfusch' is ready!
+2023-03-19 16:42:54,295 [INFO   ] [CONNECTION] fd=752 connection established: peer=127.0.0.1:65475
+2023-03-19 16:42:57,979 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:49:43,955 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 16:49:43,955 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 16:49:43,955 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 16:49:43,955 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 16:49:43,956 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 16:49:43,962 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 16:49:43,963 [INFO   ] [INFORMATION] information channel established
+2023-03-19 16:49:44,071 [INFO   ] [CONNECTION] fd=984 connection established: peer=127.0.0.1:65487
+2023-03-19 16:49:44,071 [INFO   ] [EXECUTION] fd=984 'Pfusch' is ready!
+2023-03-19 16:49:45,370 [INFO   ] [CONNECTION] fd=660 connection established: peer=127.0.0.1:65488
+2023-03-19 16:49:48,978 [INFO   ] [CONTROLLER] market open
+2023-03-19 16:51:08,767 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=79.797000 client_order_id=29 message='future position limit breached'
+2023-03-19 16:51:08,767 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=79.797000
+2023-03-19 16:51:08,767 [INFO   ] [CONNECTION] fd=984 connection lost
+2023-03-19 17:00:52,147 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 17:00:52,147 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 17:00:52,147 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 17:00:52,148 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 17:00:52,148 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 17:00:52,153 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 17:00:52,153 [INFO   ] [INFORMATION] information channel established
+2023-03-19 17:00:52,272 [INFO   ] [CONNECTION] fd=768 connection established: peer=127.0.0.1:65528
+2023-03-19 17:00:52,272 [INFO   ] [EXECUTION] fd=768 'Pfusch' is ready!
+2023-03-19 17:00:53,573 [INFO   ] [CONNECTION] fd=628 connection established: peer=127.0.0.1:65529
+2023-03-19 17:00:57,154 [INFO   ] [CONTROLLER] market open
+2023-03-19 17:05:46,263 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 17:05:46,263 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 17:05:46,264 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 17:05:46,264 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 17:05:46,264 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 17:05:46,268 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 17:05:46,268 [INFO   ] [INFORMATION] information channel established
+2023-03-19 17:05:46,381 [INFO   ] [CONNECTION] fd=784 connection established: peer=127.0.0.1:49152
+2023-03-19 17:05:46,381 [INFO   ] [EXECUTION] fd=784 'Pfusch' is ready!
+2023-03-19 17:05:47,554 [INFO   ] [CONNECTION] fd=992 connection established: peer=127.0.0.1:49153
+2023-03-19 17:05:51,287 [INFO   ] [CONTROLLER] market open
+2023-03-19 17:05:57,566 [INFO   ] [CONNECTION] fd=784 connection lost
+2023-03-19 17:05:57,566 [WARNING] [EXECUTION] fd=784 lost connection to auto-trader:
+2023-03-19 17:07:32,461 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 17:07:32,461 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 17:07:32,461 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 17:07:32,461 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 17:07:32,462 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 17:07:32,465 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 17:07:32,466 [INFO   ] [INFORMATION] information channel established
+2023-03-19 17:07:32,585 [INFO   ] [CONNECTION] fd=856 connection established: peer=127.0.0.1:49158
+2023-03-19 17:07:32,585 [INFO   ] [EXECUTION] fd=856 'Pfusch' is ready!
+2023-03-19 17:07:33,841 [INFO   ] [CONNECTION] fd=664 connection established: peer=127.0.0.1:49159
+2023-03-19 17:07:37,467 [INFO   ] [CONTROLLER] market open
+2023-03-19 17:09:58,305 [INFO   ] [APP] exchange started with arguments={rtg.py, run, autotrader.py}
+2023-03-19 17:09:58,305 [INFO   ] [APP] configuration={"Engine":{"MarketDataFile":"data/market_data1.csv","MarketEventInterval":0.05,"MarketOpenDelay":5.0,"MatchEventsFile":"match_events.csv","ScoreBoardFile":"score_board.csv","Speed":1.0,"TickInterval":0.25},"Execution":{"Host":"127.0.0.1","Port":12345},"Fees":{"Maker":-0.0001,"Taker":0.0002},"Hud":{"Host":"127.0.0.1","Port":12347},"Information":{"Type":"mmap","Name":"info.dat"},"Instrument":{"EtfClamp":0.002,"TickSize":1.0},"Limits":{"ActiveOrderCountLimit":10,"ActiveVolumeLimit":200,"MessageFrequencyInterval":1.0,"MessageFrequencyLimit":50,"PositionLimit":100},"Traders":{"Pfusch":"secret"}}
+2023-03-19 17:09:58,306 [INFO   ] [CONTROLLER] starting the match
+2023-03-19 17:09:58,306 [INFO   ] [EXECUTION] starting execution server: host=127.0.0.1 port=12345
+2023-03-19 17:09:58,306 [INFO   ] [INFORMATION] starting information publisher: type=mmap name=info.dat
+2023-03-19 17:09:58,314 [INFO   ] [HEADS_UP] starting heads-up display server: host=127.0.0.1 port=12347
+2023-03-19 17:09:58,314 [INFO   ] [INFORMATION] information channel established
+2023-03-19 17:09:58,426 [INFO   ] [CONNECTION] fd=1004 connection established: peer=127.0.0.1:49165
+2023-03-19 17:09:58,426 [INFO   ] [EXECUTION] fd=1004 'Pfusch' is ready!
+2023-03-19 17:09:59,624 [INFO   ] [CONNECTION] fd=1016 connection established: peer=127.0.0.1:49166
+2023-03-19 17:10:03,314 [INFO   ] [CONTROLLER] market open
+2023-03-19 17:13:46,874 [INFO   ] [COMPETITOR] 'Pfusch' sent error message: time=223.563000 client_order_id=72 message='future position limit breached'
+2023-03-19 17:13:46,874 [INFO   ] [COMPETITOR] 'Pfusch' closing execution channel at time=223.563000
+2023-03-19 17:13:46,874 [INFO   ] [CONNECTION] fd=1004 connection lost

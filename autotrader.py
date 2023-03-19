@@ -39,6 +39,9 @@ class AutoTrader(BaseAutoTrader):
         self.future_order_id_to_volume_map = dict()
         # Iterator um eine unique Order ID zu erzeugen
         self.id_iter = itertools.count(start=0, step=1)
+        # Anzahl der Versuche eine Order erneut zu senden
+        self.retries_0 = 0
+        self.retries_1 = 0
 
 
     def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
@@ -185,21 +188,25 @@ class AutoTrader(BaseAutoTrader):
             if client_order_id in self.bids_0:
                 # Future nachkaufen
                 self.bids_0.add(id)
-                for i in range(1, 5):
-                    if self.future_asks[i] > missed_volume:
+                for i in range(self.retries_0, 5):
+                    if self.future_ask_vols[i] > missed_volume:
+                        self.future_order_id_to_volume_map[id] = missed_volume
                         self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.BUY}; price {self.future_asks[i]}; volume: {missed_volume}")
                         self.send_hedge_order(id, Side.BUY, self.future_asks[i], missed_volume)
-                        return
 
             # Falls die Future Order ein Sell war
             elif client_order_id in self.asks_0:
                 # Future verkaufen
                 self.asks_0.add(id)
-                for i in range(1, 5):
-                    if self.future_bids[i] > missed_volume:
+                for i in range(self.retries_0, 5):
+                    if self.future_bid_vols[i] > missed_volume:
+                        self.future_order_id_to_volume_map[id] = missed_volume
                         self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.SELL}; price {self.future_bids[i]}; volume: {missed_volume}")
                         self.send_hedge_order(id, Side.SELL, self.future_bids[i], missed_volume)
-                        return
+
+            self.retries_0 = min(self.retries_0+1, 4)
+        else:
+            self.retries_0 = 0
 
 
     def on_order_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
@@ -219,18 +226,22 @@ class AutoTrader(BaseAutoTrader):
             if client_order_id in self.bids_1:
                 # ETF nachkaufen
                 self.bids_1.add(id)
-                for i in range(1, 5):
-                    if self.etf_asks[i] > missed_volume:
+                for i in range(self.retries_1, 5):
+                    if self.etf_ask_vols[i] > missed_volume:
+                        self.etf_order_id_to_volume_map[id] = missed_volume
                         self.send_insert_order(id, Side.BUY, self.etf_asks[i], missed_volume, Lifespan.LIMIT_ORDER)
                         self.logger.info(f"SEND ETF ORDER {id}; side {Side.BUY}; price {self.etf_asks[i]}; volume: {missed_volume}")
-                        return
 
             # Falls die ETF Order ein Sell war
             elif client_order_id in self.asks_1:
                 # ETF verkaufen
                 self.asks_1.add(id)
-                for i in range(1, 5):
-                    if self.etf_bids[i] > missed_volume:
+                for i in range(self.retries_1, 5):
+                    if self.etf_bid_vols[i] > missed_volume:
+                        self.etf_order_id_to_volume_map[id] = missed_volume
                         self.send_insert_order(id, Side.SELL, self.etf_bids[i], missed_volume, Lifespan.LIMIT_ORDER)
                         self.logger.info(f"SEND ETF ORDER {id}; side {Side.SELL}; price {self.etf_bids[i]}; volume: {missed_volume}")
-                        return
+
+            self.retries_1 = min(self.retries_1 + 1, 4)
+        else:
+            self.retries_1 = 0

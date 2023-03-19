@@ -9,6 +9,7 @@
 import asyncio
 import itertools
 from typing import List
+
 from ready_trader_go import BaseAutoTrader, Lifespan, Side
 
 
@@ -43,10 +44,8 @@ class AutoTrader(BaseAutoTrader):
         self.retries_0 = 0
         self.retries_1 = 0
 
-
     def on_order_book_update_message(self, instrument: int, sequence_number: int, ask_prices: List[int],
                                      ask_volumes: List[int], bid_prices: List[int], bid_volumes: List[int]) -> None:
-        self.logger.info(f"{sequence_number} ORDER BOOK {instrument}; BIDS: {bid_prices}; BID VOLS: {bid_volumes}; ASKS: {ask_prices}; ASK VOLS: {ask_volumes}")
 
         # Order Book speichern
         if instrument == 0:
@@ -75,7 +74,8 @@ class AutoTrader(BaseAutoTrader):
 
                 # Long ETF and Short Future
                 # Falls es profitabel ist inkl. gebührenfaktor
-                if self.etf_asks[i]*1.0002 < self.future_bids[j] and self.etf_asks[i] != 0 and self.future_bids[j] != 0:
+                if self.etf_asks[i] * 1.0002 < self.future_bids[j] and self.etf_asks[i] != 0 and self.future_bids[
+                    j] != 0:
 
                     # Mögliches profitables Volume
                     volume: int = min(self.etf_ask_vols[i], self.future_bid_vols[j])
@@ -95,13 +95,8 @@ class AutoTrader(BaseAutoTrader):
                     # Falls genügend Volume vorhanden ist, traden wir soviel wir können und brechen dann ab
                     if volume >= tradable_vol:
                         self.etf_order_id_to_volume_map[id1] = tradable_vol
-                        self.logger.info(f"SEND ETF ORDER {id1}; side {Side.BUY}; price {self.etf_asks[i]}; volume: {tradable_vol}")
-                        self.send_insert_order(id1, Side.BUY, self.etf_asks[i], tradable_vol, Lifespan.IMMEDIATE_OR_CANCEL)
-
-                        # Hedge Orders erstellen
-                        # self.future_order_id_to_volume_map[id0] = tradable_vol
-                        # self.logger.info(f"SEND FUTURE ORDER {id0}; side {Side.SELL}; price {self.future_bids[j]}; volume: {tradable_vol}")
-                        # self.send_hedge_order(id0, Side.SELL, self.future_bids[j], tradable_vol)
+                        self.send_insert_order(id1, Side.BUY, self.etf_asks[i], tradable_vol,
+                                               Lifespan.IMMEDIATE_OR_CANCEL)
                         return
 
                     # Sonst: Order nach maximal viel profitablem Volumen ausführen
@@ -111,23 +106,19 @@ class AutoTrader(BaseAutoTrader):
                         self.future_bid_vols[j] -= volume
                         self.etf_order_id_to_volume_map[id1] = volume
                         self.send_insert_order(id1, Side.BUY, self.etf_asks[i], volume, Lifespan.IMMEDIATE_OR_CANCEL)
-                        self.logger.info(f"SEND ETF ORDER {id1}; side {Side.BUY}; price {self.etf_asks[i]}; volume: {volume}")
-
-                        # self.future_order_id_to_volume_map[id0] = volume
-                        # self.logger.info(f"SEND FUTURE ORDER {id0}; side {Side.SELL}; price {self.future_bids[j]}; volume: {volume}")
-                        # self.send_hedge_order(id0, Side.SELL, self.future_bids[j], volume)
 
                         if self.etf_ask_vols[i] == 0:
                             break
 
                 # Nun: Short ETF und Long Future
-                elif self.etf_bids[i] > self.future_asks[j]*1.0002 and self.etf_bids[i] != 0 and self.future_asks[j] != 0:
+                elif self.etf_bids[i] > self.future_asks[j] * 1.0002 and self.etf_bids[i] != 0 and self.future_asks[
+                    j] != 0:
 
                     # Mögliches profitables Volume
                     volume = min(self.etf_bid_vols[i], self.future_ask_vols[j])
 
                     # Das noch handelbare Volume, bis wir das Limit erreicht haben (-100 Stück)
-                    tradable_vol = 100+self.position_1-sent_volume
+                    tradable_vol = 100 + self.position_1 - sent_volume
 
                     if tradable_vol == 0:
                         return
@@ -140,12 +131,8 @@ class AutoTrader(BaseAutoTrader):
 
                     if volume >= tradable_vol:
                         self.etf_order_id_to_volume_map[id1] = tradable_vol
-                        self.send_insert_order(id1, Side.SELL, self.etf_bids[i], tradable_vol, Lifespan.IMMEDIATE_OR_CANCEL)
-                        self.logger.info(f"SEND ETF ORDER {id1}; side {Side.SELL}; price {self.etf_bids[i]}; volume: {tradable_vol}")
-
-                        # self.future_order_id_to_volume_map[id0] = tradable_vol
-                        # self.logger.info(f"SEND FUTURE ORDER {id0}; side {Side.BUY}; price {self.future_asks[j]}; volume: {tradable_vol}")
-                        # self.send_hedge_order(id0, Side.BUY, self.future_asks[j], tradable_vol)
+                        self.send_insert_order(id1, Side.SELL, self.etf_bids[i], tradable_vol,
+                                               Lifespan.IMMEDIATE_OR_CANCEL)
                         return
 
                     # Sonst: Order nach profitablem Volumen ausführen
@@ -155,21 +142,12 @@ class AutoTrader(BaseAutoTrader):
                         self.future_ask_vols[j] -= volume
                         self.etf_order_id_to_volume_map[id1] = volume
                         self.send_insert_order(id1, Side.SELL, self.etf_bids[i], volume, Lifespan.IMMEDIATE_OR_CANCEL)
-                        self.logger.info(f"SEND ETF ORDER {id1}; side {Side.SELL}; price {self.etf_bids[i]}; volume: {volume}")
-
-                        # self.future_order_id_to_volume_map[id0] = volume
-                        # self.logger.info(f"SEND FUTURE ORDER {id0}; side {Side.BUY}; price {self.future_asks[j]}; volume: {volume}")
-                        # self.send_hedge_order(id0, Side.BUY, self.future_asks[j], volume)
 
                         if self.etf_bid_vols[i] == 0:
                             break
 
-
-
-
     def on_error_message(self, client_order_id: int, error_message: bytes) -> None:
         self.logger.warning(f"Error with order {client_order_id}: {error_message.decode()}")
-
 
     def on_order_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
         volume_to_hedge = volume
@@ -177,7 +155,6 @@ class AutoTrader(BaseAutoTrader):
         # Falls wir ETF gekauft haben
         if client_order_id in self.bids_1:
             self.position_1 += volume
-            self.logger.info(f"ETF Order {client_order_id} filled; volume filled {volume}; at price {price}; ETF position {self.position_1}")
 
             # Future verkaufen
             for i in range(5):
@@ -189,7 +166,6 @@ class AutoTrader(BaseAutoTrader):
                 # Falls genügend Volume vorhanden ist
                 if volume_to_hedge <= available_volume:
                     self.future_order_id_to_volume_map[id] = volume_to_hedge
-                    self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.SELL}; price {self.future_bids[i]}; volume: {volume_to_hedge}")
                     self.send_hedge_order(id, Side.SELL, self.future_bids[i], volume_to_hedge)
                     break
 
@@ -197,14 +173,12 @@ class AutoTrader(BaseAutoTrader):
                 else:
                     volume_to_hedge -= available_volume
                     self.future_order_id_to_volume_map[id] = available_volume
-                    self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.SELL}; price {self.future_bids[i]}; volume: {available_volume}")
                     self.send_hedge_order(id, Side.SELL, self.future_bids[i], available_volume)
 
 
         # Falls wir ETF verkauft haben
         elif client_order_id in self.asks_1:
             self.position_1 -= volume
-            self.logger.info(f"ETF Order {client_order_id} filled; volume filled {volume}; at price {price}; ETF position {self.position_1}")
 
             # Future kaufen
             for i in range(5):
@@ -216,7 +190,6 @@ class AutoTrader(BaseAutoTrader):
                 # Falls genügend Volume vorhanden ist
                 if volume_to_hedge <= available_volume:
                     self.future_order_id_to_volume_map[id] = volume_to_hedge
-                    self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.BUY}; price {self.future_asks[i]}; volume: {volume_to_hedge}")
                     self.send_hedge_order(id, Side.BUY, self.future_asks[i], volume_to_hedge)
                     break
 
@@ -224,9 +197,7 @@ class AutoTrader(BaseAutoTrader):
                 else:
                     volume_to_hedge -= available_volume
                     self.future_order_id_to_volume_map[id] = available_volume
-                    self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.BUY}; price {self.future_asks[i]}; volume: {available_volume}")
                     self.send_hedge_order(id, Side.BUY, self.future_asks[i], available_volume)
-
 
         # Falls ETF Order nicht komplett gefillt wurde
         if self.etf_order_id_to_volume_map[client_order_id] > volume:
@@ -241,8 +212,10 @@ class AutoTrader(BaseAutoTrader):
                 for i in range(self.retries_1, 5):
                     if self.etf_ask_vols[i] > missed_volume:
                         self.etf_order_id_to_volume_map[id] = missed_volume
-                        self.send_insert_order(id, Side.BUY, self.etf_asks[i], missed_volume, Lifespan.IMMEDIATE_OR_CANCEL)
-                        self.logger.info(f"SEND ETF ORDER {id}; side {Side.BUY}; price {self.etf_asks[i]}; volume: {missed_volume}")
+                        self.send_insert_order(id, Side.BUY, self.etf_asks[i], missed_volume,
+                                               Lifespan.IMMEDIATE_OR_CANCEL)
+                        self.retries_1 = min(self.retries_1 + 1, 4)
+                        return
 
             # Falls die ETF Order ein Sell war
             elif client_order_id in self.asks_1:
@@ -251,20 +224,18 @@ class AutoTrader(BaseAutoTrader):
                 for i in range(self.retries_1, 5):
                     if self.etf_bid_vols[i] > missed_volume:
                         self.etf_order_id_to_volume_map[id] = missed_volume
-                        self.send_insert_order(id, Side.SELL, self.etf_bids[i], missed_volume, Lifespan.IMMEDIATE_OR_CANCEL)
-                        self.logger.info(f"SEND ETF ORDER {id}; side {Side.SELL}; price {self.etf_bids[i]}; volume: {missed_volume}")
-
-            self.retries_1 = min(self.retries_1 + 1, 4)
+                        self.send_insert_order(id, Side.SELL, self.etf_bids[i], missed_volume,
+                                               Lifespan.IMMEDIATE_OR_CANCEL)
+                        self.retries_1 = min(self.retries_1 + 1, 4)
+                        return
         else:
             self.retries_1 = 0
-
 
     def on_hedge_filled_message(self, client_order_id: int, price: int, volume: int) -> None:
         if client_order_id in self.bids_0:
             self.position_0 += volume
         elif client_order_id in self.asks_0:
             self.position_0 -= volume
-        self.logger.info(f"Future Order {client_order_id} filled; volume filled {volume}; at price {price}; Future position {self.position_0}")
 
         # Falls die Future Order nicht komplett gefillt wurde
         if self.future_order_id_to_volume_map[client_order_id] > volume:
@@ -279,7 +250,6 @@ class AutoTrader(BaseAutoTrader):
                 for i in range(self.retries_0, 5):
                     if self.future_ask_vols[i] > missed_volume:
                         self.future_order_id_to_volume_map[id] = missed_volume
-                        self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.BUY}; price {self.future_asks[i]}; volume: {missed_volume}")
                         self.send_hedge_order(id, Side.BUY, self.future_asks[i], missed_volume)
                         self.retries_0 = min(self.retries_0 + 1, 4)
                         return
@@ -291,10 +261,8 @@ class AutoTrader(BaseAutoTrader):
                 for i in range(self.retries_0, 5):
                     if self.future_bid_vols[i] > missed_volume:
                         self.future_order_id_to_volume_map[id] = missed_volume
-                        self.logger.info(f"SEND FUTURE ORDER {id}; side {Side.SELL}; price {self.future_bids[i]}; volume: {missed_volume}")
                         self.send_hedge_order(id, Side.SELL, self.future_bids[i], missed_volume)
                         self.retries_0 = min(self.retries_0 + 1, 4)
                         return
-
         else:
             self.retries_0 = 0
